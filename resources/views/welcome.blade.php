@@ -7,90 +7,48 @@
 
         <title>Laravel</title>
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
-
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                height: 100vh;
-                margin: 0;
-            }
-
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 12px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
+  
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-                        <a href="{{ route('register') }}">Register</a>
-                    @endauth
-                </div>
-            @endif
+        <div>
+            
+            <table border='1'>
+                <thead>
+                    <tr>
+                        <th>箱ID</th>
+                        <th>箱名</th>
+                        <th>商品ID</th>
+                        <th>商品名</th>
+                        
+                    </tr>
+                </thead>
 
-            <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
-            </div>
+                <!-- 親用のループを作成 -->
+                @foreach($boxes as $box_id => $items)
+                @php
+                $box = \App\Box::find($box_id);   
+                @endphp
+                <!-- 親身だし作成 -->
+                <tr>
+                    <!-- 子の数+1にしておくと1行に混在せずに管理できるので便利 -->
+                    <td  rowspan="{{count($items)+1}}">
+                        B{{$box->id}}
+                    </td>
+                    <td rowspan="{{count($items)+1}}">
+                        {{$box->name}}
+                    </td>
+                </tr>
+                <!-- 子用のループを作成 -->
+                @foreach($items as $item)
+                <tr>
+                    <td>I{{$item->id}}</td>
+                    <td>{{$item->name}}</td>
+                </tr>
+                @endforeach
+                @endforeach
+            </table>
+            
         </div>
+        {{$paginate_items->render()}}
     </body>
 </html>

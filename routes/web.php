@@ -12,5 +12,8 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $paginate_items = \App\Item::paginate(50);
+    $boxes = $paginate_items->groupBy('box_id');
+
+    return view('welcome', compact('boxes', 'paginate_items'));
 });
